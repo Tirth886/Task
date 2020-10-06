@@ -1,0 +1,38 @@
+<div style="background: #ccc;padding: 2rem">
+    <img src="{{ profile }}" width="10%" />
+    {{ name }}
+    <b>{{ role }} </b>
+    <a href="logout">Logout</a>
+    <a href="addjob">ADD JOB POST</a>
+    <a href="viewjob">VIEW ALL JOB</a>
+</div>
+
+
+<table border="1" cellpadding="0" cellspacing="0">
+    <tr>
+        <th>TITLE</th>
+        <th>DESCRIPTION</th>
+        <th>STATUS</th>
+        <th>ACTION</th>
+    </tr>
+    {{# if status}}
+    {{#each result}}
+    <tr>
+        <td>{{this.job_title}}</td>
+        <td>{{this.job_description}}</td>
+        <td>{{this.status}}</td>
+        <td>
+            <a href="update?id={{this.id}}">EDIT</a>
+            <br>
+        </td>
+    </tr>
+    {{/each}}
+
+    {{else}}
+    <tr>
+        <td colspan="6">
+            <center><b>{{nodata}}</b></center>
+        </td>
+    </tr>
+    {{/if}}
+</table>

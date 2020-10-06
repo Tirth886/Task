@@ -1,0 +1,40 @@
+<div style="background: #ccc;padding: 2rem">
+    <img src="{{ profile }}" width="10%" />
+    {{ name }}
+    <b>{{ role }} </b>
+    <a href="logout">Logout</a>
+    <a href="addjob">ADD JOB POST</a>
+    <a href="viewjob">VIEW ALL JOB</a>
+</div>
+
+<form method="POST" action="{{# if  update}}updatejob{{ else }}addjobpost{{/if}}" style="padding: 5rem">
+    {{# if update }}
+    <input type="hidden" name="jid" value="{{ jid }}"/>
+    {{/if}}
+    <input type="text" name="job_title" placeholder="JOB TITLE" value="{{ jtitle }}">
+    <textarea name="job_description" placeholder="JOB DESCRIPTION">{{ jdescription }}</textarea>
+
+    <input type="text" name="company_name" placeholder="COMPANY NAME" value="{{ cname }}">
+    <textarea name="area" placeholder="AREA">{{ area }}</textarea>
+    <select name="city">
+        <option value="ahmedabad">Ahmedabad</option>
+        <option value="vadodra">Vadodra</option>
+    </select>
+    <select name="state">
+        <option value="gujarat">Gujarat</option>
+        <option value="rajasthan">Rajasthan</option>
+    </select>
+    <select name="country">
+        <option value="india">India</option>
+        <option value="america">America</option>
+    </select>
+    {{# if update }}
+    <select name="status">
+        <option value="open">Open</option>
+        <option value="close">Close</option>
+    </select>
+    <input type="submit" name="updatejob" value="Update Job" />
+    {{ else }}
+        <input type="submit" name="addjob" value="Add Job" />
+     {{/if}}
+</form>
