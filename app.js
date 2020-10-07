@@ -147,6 +147,7 @@ app.post("/updatejob", isLoggedIn, (req, res) => {
         }
     }
 })
+
 app.get("/addjob", isLoggedIn, (req, res) => {
     res.render('addjob', { title: "ADD JOB", name: `${req.user._json.name}`, email: req.user._json.email, profile: req.user._json.picture, role: req.user._json.role });
 })
