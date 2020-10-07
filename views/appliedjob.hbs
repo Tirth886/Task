@@ -1,0 +1,14 @@
+<table border="1" cellpadding="0" cellspacing="0">
+    <tr>
+        <th>TITLE</th>
+        <th>DESCRIPTION</th>
+        <th>STATUS</th>
+    </tr>
+    {{#each result}}
+    <tr>
+        <td>{{this.job_title}}</td>
+        <td>{{this.job_description}}</td>
+        <td>{{this.astatus}}</td>
+    </tr>
+    {{/each}}
+</table>

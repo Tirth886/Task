@@ -1,8 +1,12 @@
 <div style="background: #ccc;padding: 2rem">
      <img src="{{ profile }}" width="10%"/>
      {{ name }}
-     <b>{{ role }} </b>
+     <b>{{role}}</b>
      <a href="logout">Logout</a>
+     {{#ifEquals role "recruiter"}}
      <a href="addjob">ADD JOB POST</a>
+     {{ else }}
+     <a href="appliedjob">Applied Job</a>
+     {{/ifEquals}}
      <a href="viewjob">VIEW ALL JOB</a>
 </div>

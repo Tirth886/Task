@@ -3,6 +3,7 @@ const func = require("./functoin")
 
 const query = {
     insert: (table, fileds, values) => {
+        console.log(`INSERT INTO ${table} (${fileds}) VALUES ('${values}')`)
         return `INSERT INTO ${table} (${fileds}) VALUES ('${values}')`;
     },
     selectWhere: (feild, data) => {
@@ -63,6 +64,15 @@ const updateJob = (data) => {
     return status
 }
 
+const insertajob = (data) => {
+    console.log(data)
+    connect.con.query(query.insert('appliedjob', Object.keys(data).toString(), Object.values(data).join("','")), (err) => {
+        if (err) {
+            console.log("duplicate entry")
+        }
+    })
+}
+
 const insertjob = (data) => {
     let status = true
     const jobdata = {
@@ -83,7 +93,6 @@ const insertjob = (data) => {
                 console.log("duplicate entry")
             }
         })
-
     } else { status = false }
     return status
 }
@@ -92,3 +101,4 @@ const insertjob = (data) => {
 exports.insertuser = insertuser
 exports.insertjob = insertjob
 exports.updateJob = updateJob
+exports.insertajob = insertajob

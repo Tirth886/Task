@@ -1,11 +1,3 @@
-<div style="background: #ccc;padding: 2rem">
-    <img src="{{ profile }}" width="10%" />
-    {{ name }}
-    <b>{{ role }} </b>
-    <a href="logout">Logout</a>
-    <a href="addjob">ADD JOB POST</a>
-    <a href="viewjob">VIEW ALL JOB</a>
-</div>
 
 
 <table border="1" cellpadding="0" cellspacing="0">
@@ -16,6 +8,11 @@
         <th>ACTION</th>
     </tr>
     {{# if status}}
+    
+
+
+
+ {{#ifEquals role "recruiter"}}
     {{#each result}}
     <tr>
         <td>{{this.job_title}}</td>
@@ -27,6 +24,22 @@
         </td>
     </tr>
     {{/each}}
+ {{ else }}
+ {{#each result}}
+  {{#ifEquals this.status "open"}}
+    <tr>
+        <td>{{this.job_title}}</td>
+        <td>{{this.job_description}}</td>
+       
+        <td>{{ this.status }}</td>
+        <td>
+            <a href="apply?id={{this.id}}">apply</a>
+            <br>
+        </td>
+    </tr>
+    {{/ifEquals}}
+    {{/each}}
+ {{/ifEquals}}
 
     {{else}}
     <tr>

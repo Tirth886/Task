@@ -1,11 +1,4 @@
-<div style="background: #ccc;padding: 2rem">
-    <img src="{{ profile }}" width="10%" />
-    {{ name }}
-    <b>{{ role }} </b>
-    <a href="logout">Logout</a>
-    <a href="addjob">ADD JOB POST</a>
-    <a href="viewjob">VIEW ALL JOB</a>
-</div>
+
 
 <form method="POST" action="{{# if  update}}updatejob{{ else }}addjobpost{{/if}}" style="padding: 5rem">
     {{# if update }}

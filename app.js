@@ -18,6 +18,7 @@ app.use(cors())
 app.use(bodyparser.urlencoded({ extended: false }))
 
 app.use(bodyparser.json())
+
 Handlebars.registerHelper('ifEquals', function(arg1, arg2, options) {
 
     return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
@@ -25,6 +26,7 @@ Handlebars.registerHelper('ifEquals', function(arg1, arg2, options) {
 app.engine('hbs', hbs({
     extname: 'hbs',
     defaultLayout: 'index',
+    partialsDir: __dirname + '/views/',
     helpers: Handlebars
 }));
 app.set('view engine', 'hbs');
@@ -61,7 +63,6 @@ app.post('/entryinfo', (req, res) => {
         req.session.passport.user._json['phone'] = number
         req.session.passport.user._json['role'] = role
 
-
         if (modal.insertuser(req.session.passport.user._json) == true) {
             res.redirect('/dashboard');
         } else {
@@ -71,6 +72,7 @@ app.post('/entryinfo', (req, res) => {
         }
     }
 })
+
 app.get("/viewjob", isLoggedIn, (req, res) => {
     connect.con.query(`SELECT * FROM job`, (err, result) => {
         if (err) throw err
@@ -78,8 +80,24 @@ app.get("/viewjob", isLoggedIn, (req, res) => {
             res.render('listjob', { title: "LIST JOB", name: `${req.user._json.name}`, email: req.user._json.email, profile: req.user._json.picture, role: req.user._json.role, result: result, status: true })
         } else {
             res.render('listjob', { title: "LIST JOB", name: `${req.user._json.name}`, email: req.user._json.email, profile: req.user._json.picture, role: req.user._json.role, result: "NO JOBS", status: false })
+
         }
     })
+})
+app.get("/apply", isLoggedIn, (req, res) => {
+    let address = req.url
+    let query = url.parse(address, true)
+
+
+    let data = {
+        jobid: query.query.id,
+        userid: req.user._json.sub,
+        astatus: "pending"
+    }
+
+    modal.insertajob(data)
+    res.redirect("/viewjob")
+
 })
 app.get("/update", isLoggedIn, (req, res) => {
     let address = req.url
@@ -102,16 +120,12 @@ app.get("/update", isLoggedIn, (req, res) => {
                 jid: id,
                 update: true
             });
-        } else {
-
-        }
+        } else {}
     })
 })
 
 app.post("/updatejob", isLoggedIn, (req, res) => {
-    let address = req.url
-    let query = url.parse(address, true)
-    let id = query.query.id
+
     if (req.body.updatejob) {
         const jobdata = {
             jid: req.body.jid,
@@ -159,17 +173,22 @@ app.post("/addjobpost", isLoggedIn, (req, res) => {
         }
     }
 })
+
 app.get('/dashboard', isLoggedIn, (req, res) => {
     res.render('dashboard', { title: "Dashboard", name: `${req.user._json.name}`, email: req.user._json.email, profile: req.user._json.picture, role: req.user._json.role })
+})
+app.get('/appliedjob', isLoggedIn, (req, res) => {
+    connect.con.query(`SELECT * FROM  appliedjob,job WHERE appliedjob.userid = '${req.user._json.sub}' AND appliedjob.jobid = job.id`, (err, result) => {
+        if (err) throw err
+        res.render('appliedjob', { title: "APPLIED JOB", result: result })
+    })
+
 })
 app.get('/google', passport.authenticate('google', { scope: ['email', 'profile'] }));
 app.get('/google/callback', passport.authenticate('google', { failureRedirect: '/failed' }),
     function(req, res) {
         connect.con.query(`SELECT * FROM users WHERE email = '${req.user._json.email}'`, (err, result) => {
             if (err) throw err
-
-            // console.log(result.length)
-            // return false
             if (result.length > 0) {
                 req.user._json = result[0]
                 res.redirect('/dashboard');
@@ -179,6 +198,7 @@ app.get('/google/callback', passport.authenticate('google', { failureRedirect: '
         })
     }
 );
+
 app.get('/logout', (req, res) => {
     req.session = null;
     req.logout();
